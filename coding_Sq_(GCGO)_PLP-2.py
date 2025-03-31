@@ -61,3 +61,40 @@ class QuizDatabase:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM quizzes WHERE subject=? AND level=?", (subject, level))
             return cursor.fetchall()
+         
+ # Main application class
+class QuizApp:
+    def __init__(self):
+        self.db = QuizDatabase()
+
+    # Main menu for the quiz application
+    def main_menu(self):
+        while True:
+            print("\nWelcome to the Coding SQ Quiz Application")
+            print("1. Create a Quiz")
+            print("2. Edit a Quiz")
+            print("3. Delete a Quiz")
+            print("4. Take a Quiz")
+            print("5. View Grades")
+            print("6. Quit")
+            choice = input("Enter your choice: ")
+            
+            if choice == "1":
+                admin_pass = input("Enter admin passcode: ")
+                if admin_pass == "33333":
+                    self.create_quiz()
+                else:
+                    print("Incorrect passcode. Access denied.")
+            elif choice == "2":
+                self.edit_quiz()
+            elif choice == "3":
+                self.delete_quiz()
+            elif choice == "4":
+                self.take_quiz()
+            elif choice == "5":
+                self.view_grades()
+            elif choice == "6":
+                print("Goodbye!")
+                break
+            else:
+                print("Invalid choice. Please try again.")
