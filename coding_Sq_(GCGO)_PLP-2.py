@@ -61,7 +61,42 @@ class QuizDatabase:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM quizzes WHERE subject=? AND level=?", (subject, level))
             return cursor.fetchall()
-         
+        
+  # Insert a grade into the database
+    def insert_grade(self, name, subject, level, score, total, percentage):
+        with self.connect() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO grades (name, subject, level, score, total, percentage)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (name, subject, level, score, total, percentage))
+            conn.commit()
+
+    # Fetch all grades from the database
+    def fetch_grades(self):
+        with self.connect() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM grades")
+            return cursor.fetchall()
+
+    # Delete a quiz from the database
+    def delete_quiz(self, quiz_id):
+        with self.connect() as conn:
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM quizzes WHERE id=?", (quiz_id,))
+            conn.commit()
+
+    # Update an existing quiz in the database
+    def update_quiz(self, quiz_id, question, options, correct_answer):
+        with self.connect() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE quizzes 
+                SET question=?, options=?, correct_answer=? 
+                WHERE id=?
+            """, (question, options, correct_answer, quiz_id))
+            conn.commit() 
+
  # Main application class
 class QuizApp:
     def __init__(self):
