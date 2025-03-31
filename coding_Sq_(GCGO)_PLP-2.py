@@ -185,3 +185,50 @@ class QuizApp:
             
             self.db.insert_quiz(subject, level, question, answer, None, "open")
         print("Quiz created successfully!")
+
+# Delete a quiz from the database
+    def delete_quiz(self):
+        admin_pass = input("Enter admin passcode to delete a quiz: ")
+        if admin_pass == "33333":
+            subject = input("Enter the subject of the quiz to delete: ")
+            level = input("Enter the level of the quiz to delete: ")
+            quizzes = self.db.fetch_quizzes(subject, level)
+            
+            if not quizzes:
+                print("No quizzes found for this subject and level.")
+                return
+            
+            print("Available quizzes:")
+            for quiz in quizzes:
+                print(f"ID: {quiz[0]}, Question: {quiz[3]}")
+            
+            quiz_id = int(input("Enter the quiz ID to delete: "))
+            self.db.delete_quiz(quiz_id)
+            print("Quiz deleted successfully!")
+        else:
+            print("Incorrect passcode. Access denied.")
+
+    # Edit a quiz in the database
+    def edit_quiz(self):
+        admin_pass = input("Enter admin passcode to edit a quiz: ")
+        if admin_pass == "33333":
+            subject = input("Enter the subject of the quiz to edit: ")
+            level = input("Enter the level of the quiz to edit: ")
+            quizzes = self.db.fetch_quizzes(subject, level)
+            
+            if not quizzes:
+                print("No quizzes found for this subject and level.")
+                return
+            
+            print("Available quizzes:")
+            for quiz in quizzes:
+                print(f"ID: {quiz[0]}, Question: {quiz[3]}")
+            
+            quiz_id = int(input("Enter the quiz ID to edit: "))
+            question = input("Enter new question: ")
+            options = ",".join([input(f"Option {i+1}: ") for i in range(4)])
+            correct_answer = int(input("Enter the correct option (1-4): ")) - 1
+            self.db.update_quiz(quiz_id, question, options, correct_answer)
+            print("Quiz updated successfully!")
+        else:
+            print("Incorrect passcode. Access denied.")
