@@ -186,7 +186,7 @@ class QuizApp:
             self.db.insert_quiz(subject, level, question, answer, None, "open")
         print("Quiz created successfully!")
 
-# Delete a quiz from the database
+    # Delete a quiz from the database
     def delete_quiz(self):
         admin_pass = input("Enter admin passcode to delete a quiz: ")
         if admin_pass == "33333":
@@ -232,3 +232,50 @@ class QuizApp:
             print("Quiz updated successfully!")
         else:
             print("Incorrect passcode. Access denied.")
+
+     # Take a quiz (user answers the questions)
+    def take_quiz(self):
+        subject = input("Enter the subject you want to take: ")
+        level = input("Enter the level (Beginner, Intermediate, Advanced): ")
+        quizzes = self.db.fetch_quizzes(subject, level)
+        
+        if not quizzes:
+            print("No quizzes available for this subject and level.")
+            return
+        
+        score = 0
+        total = len(quizzes)
+        
+        for quiz in quizzes:
+            question, options, correct_answer, q_type = quiz[3], quiz[4], quiz[5], quiz[6]
+            print(f"\n{question}")
+            
+            if q_type == "mcq":
+                options_list = options.split(",")
+                for idx, option in enumerate(options_list, 1):
+                    print(f"{idx}. {option}")
+                answer = int(input("Enter your choice (1-4): ")) - 1
+                if answer == correct_answer:
+                    score += 1
+            else:
+                answer = input("Your answer: ").lower()
+                if answer == options.lower():
+                    score += 1
+        
+        percentage = (score / total) * 100
+        print(f"Your final score: {percentage:.2f}% ({score}/{total})")
+        
+        name = input("Enter your name: ")
+        self.db.insert_grade(name, subject, level, score, total, percentage)
+
+    # View grades of all users
+    def view_grades(self):
+        grades = self.db.fetch_grades()
+        if not grades:
+            print("No grades available.")
+            return
+        
+        print("\nGrades:")
+        for grade in grades:
+            print(f"{grade[1]} - {grade[2]} ({grade[3]}): {grade[4]}/{grade[5]} ({grade[6]:.2f}%)")
+
