@@ -98,3 +98,55 @@ class QuizApp:
                 break
             else:
                 print("Invalid choice. Please try again.")
+
+    # Create a quiz (Multiple Choice or Open Ended)
+    def create_quiz(self):
+        while True:
+            print("\n1. Multiple Choice Quiz")
+            print("2. Open Ended Quiz")
+            print("3. Back")
+            choice = input("Enter your choice: ")
+            
+            if choice == "1":
+                self.create_mcq()
+            elif choice == "2":
+                self.create_open_ended()
+            elif choice == "3":
+                return
+            else:
+                print("Invalid choice. Please try again.")
+
+    # Create a Multiple Choice Quiz
+    def create_mcq(self):
+        subject = input("Enter the course/subject name: ")
+        level = input("Enter the level (Beginner, Intermediate, Advanced): ")
+        num_questions = int(input("How many questions do you want to add (max 10)? "))
+        
+        if num_questions > 10:
+            print("Max 10 questions allowed.")
+            return
+        
+        for _ in range(num_questions):
+            question = input("Question: ")
+            options = [input(f"Option {i+1}: ") for i in range(4)]
+            correct_answer = int(input("Enter the correct option (1-4): ")) - 1
+            
+            self.db.insert_quiz(subject, level, question, ",".join(options), correct_answer, "mcq")
+        print("Quiz created successfully!")
+
+    # Create an Open Ended Quiz
+    def create_open_ended(self):
+        subject = input("Enter the course/subject name: ")
+        level = input("Enter the level (Beginner, Intermediate, Advanced): ")
+        num_questions = int(input("How many questions do you want to add (max 10)? "))
+        
+        if num_questions > 10:
+            print("Max 10 questions allowed.")
+            return
+        
+        for _ in range(num_questions):
+            question = input("Question: ")
+            answer = input("Correct answer: ")
+            
+            self.db.insert_quiz(subject, level, question, answer, None, "open")
+        print("Quiz created successfully!")
