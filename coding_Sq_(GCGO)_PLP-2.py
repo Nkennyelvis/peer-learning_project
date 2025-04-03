@@ -280,4 +280,4 @@ class QuizApp:
             print(f"{grade[1]} - {grade[2]} ({grade[3]}): {grade[4]}/{grade[5]} ({grade[6]:.2f}%)")
 
 # Running the application
-app = QuizApp().main_menu()
+QuizApp().main_menu()
