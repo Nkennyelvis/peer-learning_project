@@ -149,7 +149,7 @@ class QuizApp:
             elif choice == "3":
                 return
             else:
-                print("Invalid choice. Please try again.")
+                print("Invalid choice, Please try again!!")
 
     # Create a Multiple Choice Quiz
     def create_mcq(self):
@@ -280,6 +280,4 @@ class QuizApp:
             print(f"{grade[1]} - {grade[2]} ({grade[3]}): {grade[4]}/{grade[5]} ({grade[6]:.2f}%)")
 
 # Running the application
-if __name__ == "__main__":
-    app = QuizApp()
-    app.main_menu()
+app = QuizApp().main_menu()
